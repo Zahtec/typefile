@@ -9,7 +9,10 @@ TypeFile aims to be a strictly typed configuration/data storage file. It is very
 To get started with TypeFile, you need the Type File Interpreter or TFI
 
 If you use [VSC](https://code.visualstudio.com), install the syntax extension here (coming soon...).  
-If you use [NPM](https://www.npmjs.com/), install the package here (coming soon...).
+For [Node.js](https://nodejs.org): Get the [npm](https://www.npmjs.com) package here (coming soon...).  
+For [Deno](https://deno.land): Get the [npm](https://www.npmjs.com) package here (coming soon...).  
+For [Python](https://www.python.org): Get the [pip](https://pip.pypa.io) package here (coming soon...).  
+For [Rust](https://www.rust-lang.org): Get the [cargo](https://crates.io) crate here (coming soon...).  
 
 **Disclaimer: Since this project is brand new, only the services listed above currently have support**.
 
