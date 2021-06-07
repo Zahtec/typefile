@@ -32,7 +32,7 @@ NewLines (LF or CRLF) do not count as whitespace and are required.
 
 **Chapters:**  
 - [Comments](https://github.com/Zahtec/typefile/blob/main/README2.md#comments)
-- Key/Value Pairs
+- [Key/Value Pairs](https://github.com/Zahtec/typefile/blob/main/README2.md#comments)
 - Objects
 - Types
 
