@@ -144,6 +144,7 @@ Values can be any one of these types:
 - Local Date
 - Array
 - Inline Table/Object
+
 For strings, you can use single quotes (`'`) or double quotes (`"`).
 ```toml
 key = "value"
