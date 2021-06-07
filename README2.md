@@ -44,7 +44,7 @@ Comments are defined by using the `#` character. After the `#` the rest of the l
 key = 'value' # Look at the key/value pair to the left of me!
 ```
 To make a multi-line comment, use three `#`'s. After three `#`'s, the rest of the file will be a comment until a repeating three `#`'s appears. Not putting the last three `#`'s before the EOF (End of file) will result in an error.
-```toml
+```
 ### I span
 	Over Multiple
 	Lines ###
