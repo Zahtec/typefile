@@ -1,4 +1,4 @@
-# TypeFile
+# TypeFile {#main}
 **!! THIS IS A CONCEPT !!**  
 A strongly typed configuration/data storage file built for languages like [TypeScript](https://www.typescriptlang.org) and [Java](https://www.java.com).
 
