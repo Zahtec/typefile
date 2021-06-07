@@ -17,7 +17,7 @@ For [Rust](https://www.rust-lang.org): Get the [cargo](https://crates.io) crate 
 [IDE](https://en.wikipedia.org/wiki/Integrated_development_environment) extensions:  
 [VSC](https://code.visualstudio.com): Install the extension here (coming soon).  
 [IDEA](https://www.jetbrains.com/idea): Install the extension here (coming soon).  
-**These only enforce syntax and can not be used instead of TFI**
+**These only enforce syntax and can not be used instead of a TFI**
 
 ## Requirements
 TypeFile must be in a UTF-8 encoded file.  
