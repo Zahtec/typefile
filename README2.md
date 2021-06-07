@@ -25,7 +25,7 @@ TypeFiles must always end in `.tf`.
 
 ## Spec
 TypeFile is case-sensitive.  
-TypeFile will ignore all whitespace except for inside a string.  
+TypeFile will ignore all whitespace (Tabs and spaces) except for inside a string.  
 NewLines (LF or CRLF) do not count as whitespace and are required.
 
 ## Docs
@@ -46,10 +46,10 @@ key = 'value' # Look at the key/value pair to the left of me!
 To make a multi-line comment, use three `#`'s. After three `#`'s, the rest of the file will be a comment until a repeating three `#`'s appears. Not putting the last three `#`'s before the EOF (End of file) will result in an error.
 ```
 ### I span
-	Over Multiple
-	Lines ###
+    Over Multiple
+    Lines ###
 
 ### I cause
-	an error
+    an error
 ```
 ### Key/Value pairs
