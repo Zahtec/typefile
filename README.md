@@ -3,9 +3,11 @@
 A type-oriented configuration file similar to [TOML](https://github.com/toml-lang/toml). Built for languages with strict typing like [TypeScript](https://www.typescriptlang.org). In JavaScript/TypeScript all numbers have 1 type, the node package handles this. For other languages like [Java](https://www.java.com), types like `decimal` or `float` will work.
 
 ## ❔ So what is TypeFile?
-TypeFile aims to make a strictly typed configuration/data storage file. It is very similar to [TOML](https://github.com/toml-lang/toml).
+TypeFile aims to be a strictly typed configuration/data storage file. It is very similar to [TOML](https://github.com/toml-lang/toml).
 
 ## ⌨ How do I use it?
+To get started with TypeFile, you need the Type File Interpreter or TFI
+
 If you use [VSC](https://code.visualstudio.com), install the syntax extension here (coming soon...).  
 If you use [NPM](https://www.npmjs.com/), install the package here (coming soon...).
 
