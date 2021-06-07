@@ -135,7 +135,15 @@ Since bare keys can be composed of only ASCII integers, it is possible to write 
 ```
 ### Values
 Values can be any one of these types:
-||||||||||||
+- String
+- Integer
+- Float
+- Boolean
+- Offset Date-Time
+- Local Date-Time
+- Local Date
+- Array
+- Inline Table/Object
 For strings, you can use single quotes (`'`) or double quotes (`"`).
 ```toml
 key = "value"
