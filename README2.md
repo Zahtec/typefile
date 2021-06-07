@@ -31,7 +31,7 @@ NewLines (LF or CRLF) do not count as whitespace and are required.
 ## Docs
 
 **Chapters:**  
-- Comments
+- [Comments](https://github.com/Zahtec/typefile/blob/main/README2.md#comments)
 - Key/Value Pairs
 - Objects
 - Types
