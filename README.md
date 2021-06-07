@@ -8,7 +8,8 @@ TypeFile aims to be a strictly typed configuration/data storage file. It is very
 ## ⌨ How do I use it?
 To get started with TypeFile, you need the Type File Interpreter or TFI
 
-If you use [VSC](https://code.visualstudio.com) as your IDE, install the extension here (coming soon...).  
+If you use [VSC](https://code.visualstudio.com) as your IDE, install the extension here (coming soon...).
+----
 For [Node.js](https://nodejs.org): Get the [npm](https://www.npmjs.com) package here (coming soon...).  
 For [Deno](https://deno.land): Get the [npm](https://www.npmjs.com) package here (coming soon...).  
 For [Python](https://www.python.org): Get the [pip](https://pip.pypa.io) package here (coming soon...).  
