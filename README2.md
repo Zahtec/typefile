@@ -39,17 +39,38 @@ NewLines (LF or CRLF) do not count as whitespace and are required.
 ### Comments
 
 Comments are defined by using the `#` character. After the `#` the rest of the line will be a comment.
-```toml
+```
 # Hi im a comment
 key = 'value' # Look at the key/value pair to the left of me!
 ```
 To make a multi-line comment, use three `#`'s. After three `#`'s, the rest of the file will be a comment until a repeating three `#`'s appears. Not putting the last three `#`'s before the EOF (End of file) will result in an error.
-
-<span style="color:red">### I span
+```
+### I span
     Over Multiple
-    Lines ###</span>
+    Lines ###
 
-\#\#\# I cause
+### I cause
     an error
-
+```
 ### Key/Value pairs
+Keys are on the left side of the equals sign, while values are on the right. Type declaration is always after the values on the right and is initialized using the `@` symbol. The key, equals sign, value, and type declaration must be on the same line. Also, types must not be incorrect to the value or else the it will throw an error.
+```
+# Keep in mind "value" is not a real value, and "type" is not a real type. They are only used as an example.
+key = value@type
+# Since whitespace is ignore, the TFI sees this as:
+key=value@type
+# So you can style it any way you want. My preffered styling is:
+key = value @ type
+```
+Here is a small example with real values and types:
+```
+name = "zahtec" @ string
+integer = 1 @ integer
+```
+Here is the same data but in [JSON](https://www.json.org):
+```
+{
+    "name": "zahtec",
+    "integer": 1
+}
+```
