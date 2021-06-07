@@ -49,7 +49,7 @@ key4 = undefined # Okay
 ```
 ### Keys
 A key may either be bare, quoted, or dotted.
-Bare keys may only contain ASCII letters, ASCII digits, underscores, and dashes `(A-Za-z0-9_-)`. Note that bare keys are allowed to be composed of only ASCII digits, e.g. 1234, but are always interpreted as strings.
+Bare keys may only contain ASCII letters, ASCII digits, underscores, and dashes `(A-Za-z0-9_-)` and should always be typed in [Camel Case](https://en.wikipedia.org/wiki/Camel_case). Note that bare keys are allowed to be composed of only ASCII digits, e.g. 1234, but are always interpreted as strings.
 ```toml
 key = "value"
 bare_key = "value"
@@ -449,7 +449,7 @@ error = 1<number>! # Cant be any type when type number is already declared
 expo = 20e-11<float<exponent<negative>>>
 ```
 ### Tables
-Tables (also known as hash tables or dictionaries) are collections of key/value pairs. They are defined by headers, with square brackets on a line by themselves. You can tell headers apart from arrays because arrays are only ever values.
+Tables (also known as hash tables or dictionaries) are collections of key/value pairs. They are defined by headers, with square brackets on a line by themselves and will always implicity be an Object type. You can tell headers apart from arrays because arrays are only ever values. Tables should always be typed in [Camel Case](https://en.wikipedia.org/wiki/Camel_case).
 ```toml
 # Example table header
 [table]
