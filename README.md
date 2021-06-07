@@ -18,7 +18,8 @@ For [Rust](https://www.rust-lang.org): Get the [cargo](https://crates.io) crate 
 
 ## ⚙ Spec
 TypeFile is case-sensitive.  
-A `.tf` or `.typefile` file must be valid UTF-8 encoded Unicode document.
+TypeFile must always end in `.tf`.  
+TypeFile must be encoded in the UTF-8 format.  
 
 ## 📕 Docs
 
