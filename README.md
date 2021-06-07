@@ -1,21 +1,18 @@
 # TypeFile
-!! **THIS IS A CONCEPT** !!
+!! **THIS IS A CONCEPT** !!  
 A type-oriented configuration file similar to [TOML](https://github.com/toml-lang/toml). Built for languages with strict typing like [TypeScript](https://www.typescriptlang.org). In JavaScript/TypeScript all numbers have 1 type, the node package handles this. For other languages like [Java](https://www.java.com), types like `decimal` or `float` will work.
 
 ## ❔ So what is TypeFile?
-----
 TypeFile aims to make a strictly typed configuration/data storage file. It is very similar to [TOML](https://github.com/toml-lang/toml).
 
 ## ⌨ How do I use it?
-----
-If you use [VSC](https://code.visualstudio.com), install the syntax extension here (coming soon...).
+If you use [VSC](https://code.visualstudio.com), install the syntax extension here (coming soon...).  
 If you use [NPM](https://www.npmjs.com/), install the package here (coming soon...).
 
 **Disclaimer: Since this project is brand new, only the services listed above currently have support**.
 
 ## ⚙ Spec
-----
-TypeFile is case-sensitive.
+TypeFile is case-sensitive.  
 A `.tf` or `.typefile` file must be valid UTF-8 encoded Unicode document.
 
 ## 📕 Docs
@@ -27,7 +24,7 @@ A `.tf` or `.typefile` file must be valid UTF-8 encoded Unicode document.
    Line
    Comments *#
 ```
-*# means the rest of the line is a comment. #\* means anything after it before \*# is a comment*
+*# means the rest of the line is a comment. #\* means anything after it before \*# is a comment*  
 
 ### Key/Value Pairs
 Keys are on the left side of the equals sign, while values are on the right. Type declaration is always after the values on the right. Whitespace is ignored around key names and values. The key, equals sign, value, and type declaration must be on the same line. Also, types must not be incorrect to the value.
