@@ -330,7 +330,104 @@ prop = "value"
 inline = { prop = "value" }
 # This will create inline.inline.prop which is equal to "value". It is highly discouraged.
 ```
-.. continue ..
+XXXXXXXX
+#### Object arrays
+Object arrays allow for multiple, unnamed objects, to be inside a named array. They can be expressed by using an object header with double brackets. Like so: `[[array]]`. The first instance of that header defines the array and its first element, each subsequent instance creates and defines a new object element in that array. The objects are inserted into the array in the order they were encountered. Object arrays follow all the same concepts that a regular object does except for duplicate naming, this will instead add a new object to the array.
+```
+# These are all valid.
+[[array]]
+prop = "value"
+[[array]]
+prop = "value2"
+# Duplicate names are allowed for array headers as that is how you add a new object to the array.
+```
+Here is the same data but in [JSON](https://www.json.org):
+```
+{
+	"array": [
+		{ "prop": "value" },
+		{ "prop": "value2" }
+	]
+}
+```
+Empty objects within the array are dissalowed.
+```
+# This throws an error.
+[[array]]
+
+[object]
+prop = "value"
+```
+Object arrays can be quoted or bare, like keys.
+```
+# This is valid.
+[["I am quoted"]]
+prop = "value"
+```
+Object arrays count as object headers.
+```
+# These are all valid.
+[object]
+prop = "value"
+[[array]]
+prop = "value2"
+```
+Subobjects, inline objects, and Subobjectarrays work as well. Like so:
+```
+# These are all valid.
+[[array]]
+prop = "value"
+[[array]]
+prop = "value2"
+prop2 = { inline = "value" }
+:[subobject]
+prop = "value"
+:[[subobjectarray]]
+prop = "value"
+```
+Here is the same data but in [JSON](https://www.json.org):
+```
+{
+	"array": [
+		{ "prop": "value" },
+		{
+			"prop": "value2",
+			"prop2": { "inline": "value" },
+			"subobject": { "prop": "value" },
+			"subobjectarray": [
+				{ "prop": "value" }
+			]
+		}
+	]
+}
+```
+An array is not equal to an object array (even if you can produce the same result) and will throw an error.
+```
+# This throws an error.
+prop = []
+
+[[prop]]
+```
+XXXXXXXXX
+#### Index signatures
+Index signatures define the types inside an object or the properties (key/value pairs) of objects inside of an array of objects. As mentioned before, keys (bare or quoted) are always interpreted as strings by the TFI (TypeFile Interpreter). Index signatures are initialized using the `@` symbol after an object/object array header.
+```
+# Keep in mind "type" is not a real type and is only used as an example.
+[object] @ type
+[[objectarray]] @ type
+```
+Index signatures tell what type all propertie values in the object/object array will be.
+```
+# These are all valid.
+[object] @ integer
+prop = 1
+prop2 = 7
+[[objectarray]] @ string
+
+# This throws an error.
+[object2] @ string
+prop = 1
+```
 ### Types
 - Type Interpretation
 - Index Signatures
