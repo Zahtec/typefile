@@ -40,6 +40,8 @@ The proper [MIME](https://en.wikipedia.org/wiki/Media_type) type of TypeFile is 
     - The root object
     - Subobjects
     - Inline objects
+    - Object arrays
+- Type interpretation
 - Types
 
 ### Comments
@@ -330,7 +332,6 @@ prop = "value"
 inline = { prop = "value" }
 # This will create inline.inline.prop which is equal to "value". It is highly discouraged.
 ```
-XXXXXXXX
 #### Object arrays
 Object arrays allow for multiple, unnamed objects, to be inside a named array. They can be expressed by using an object header with double brackets. Like so: `[[array]]`. The first instance of that header defines the array and its first element, each subsequent instance creates and defines a new object element in that array. The objects are inserted into the array in the order they were encountered. Object arrays follow all the same concepts that a regular object does except for duplicate naming, this will instead add a new object to the array.
 ```
@@ -401,41 +402,32 @@ Here is the same data but in [JSON](https://www.json.org):
 	]
 }
 ```
-An array is not equal to an object array (even if you can produce the same result) and will throw an error.
+An array of inline objects is not equal to an object array (even if you can produce the same result) and will throw an error.
 ```
 # This throws an error.
-prop = []
+prop = [{ prop = "value" }]
 
 [[prop]]
+prop = "value"
 ```
-XXXXXXXXX
-#### Index signatures
-Index signatures define the types inside an object or the properties (key/value pairs) of objects inside of an array of objects. As mentioned before, keys (bare or quoted) are always interpreted as strings by the TFI (TypeFile Interpreter). Index signatures are initialized using the `@` symbol after an object/object array header.
+### Type interpretation
+Type interpretation will only go as far as the basic type. This applies for all types.
 ```
-# Keep in mind "type" is not a real type and is only used as an example.
-[object] @ type
-[[objectarray]] @ type
-```
-Index signatures tell what type all propertie values in the object/object array will be.
-```
-# These are all valid.
-[object] @ integer
-prop = 1
-prop2 = 7
-[[objectarray]] @ string
-
-# This throws an error.
-[object2] @ string
-prop = 1
+# This is interpreted as a string.
+prop = 'value'
+# This is interpreted as an integer. Not a integer-decimal-positive.
+prop2 = 2
+# This is not needed since it is automatically interpreted.
+prop3 = false @ boolean
 ```
 ### Types
-- Type Interpretation
-- Index Signatures
 - String
 - Integer
 - Float
 - Boolean
+- Array
 - Offset Date-Time
 - Local Date-Time
 - Local Date
-- Array
+- Any
+- Unknown
