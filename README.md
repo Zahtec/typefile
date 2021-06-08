@@ -51,11 +51,9 @@ key=value<type>
 ```toml
 key = # ERROR
 key2 = "" # Okay but discouraged. Set to string type and use null instead
-key3 = null # Okay
-key4 = undefined # Okay
 ```
 ### Keys
-A key may either be bare, quoted, or dotted.
+A key may either be bare or quoted.
 Bare keys may only contain ASCII letters, ASCII digits, underscores, and dashes `(A-Za-z0-9_-)` and should always be typed in [Camel Case](https://en.wikipedia.org/wiki/Camel_case). Note that bare keys are allowed to be composed of only ASCII digits, e.g. 1234, but are always interpreted as strings.
 ```toml
 key = "value"
@@ -77,65 +75,17 @@ A bare key must be non-empty and so must a quoted key. Unlike [TOML](https://git
 "" = "blank"     # ERROR
 '' = 'blank'     # ERROR
 ```
-Dotted keys are a sequence of bare or quoted keys joined with a dot. This allows for grouping similar properties together. Whitespace around dotted keys are ignored. Note that dotted keys make any value before the last a table, and directly defining those will throw an error.
-```toml
-name = "Orange"
-physical.color = "orange"
-physical.shape = "round"
-price."$" = true
-white.       space = false
-```
-[JSON](https://www.json.org) conversion:
-```json
-{
-  "name": "Orange",
-  "physical": {
-    "color": "orange",
-    "shape": "round"
-  },
-  "price": {
-    "$": true
-  }
-}
-```
 Defining a key multiple times is dissalowed.
 ```toml
 # ERROR
 key = 'value'
-key = 'vaue2'
+key = 'value2'
 ```
 Note that bare keys and quoted keys are equivalent:
 ```toml
 # ERROR
 spelling = "favorite"
 "spelling" = "favourite"
-```
-As long as a key hasn't been directly defined, you may still write to it and to names within it.
-```toml
-# This makes the key "fruit" into a table.
-fruit.apple.smooth = true
-
-# So then you can add to the table "fruit" like so:
-fruit.orange = 2
-
-# As mentioned earlier, dotted keys make any value before the last a table, and directly defining those will throw an error.
-fruit = "orange" # ERROR
-fruit.apple = true # ERROR
-```
-```toml
-# This defines the value of fruit.apple to be an integer.
-fruit.apple = 1
-# So the table "fruit" has a value "apple" and its set to 1.
-# Since "fruit" is now a table, and "apple" is defined as an integer. You cant act like "apple" is a table
-fruit.apple.smooth = true # ERROR
-```
-Since bare keys can be composed of only ASCII integers, it is possible to write dotted keys that look like floats but are 2-part dotted keys. This is **HIGHLY** discouraged as it goes directly against strict typing.
-```toml
-3.14159 = "pi"
-```
-[JSON](https://www.json.org) conversion:
-```json
-{ "3": { "14159": "pi" } }
 ```
 ### Values
 Values can be any one of these types:
@@ -166,6 +116,8 @@ Any types allow for any type to be written to the value. But is discouraged due 
 ```toml
 any = 'string'! # the ! declares it as an any type, this must be on the same line right after the value
 example         =    'string'           ! # since all whitespace is ignored, this would work but is discouraged
+wtf = 'string'<string>! # ERROR
+# The string type was already declared, so it can not be an any type
 ```
 Unknown types allow for ... (fill in after experimenting)
 ```toml
@@ -177,15 +129,34 @@ unknown = 'string'? # Okay, but discouraged
 example = undefined? # Okay, you might not know the data that will be overwritten here
 ```
 ### Types
-This lists out all the types in TypeFile and there rules. Some things may very depending on the programming language you decide to use TypeFile with.
+This lists out all the types in TypeFile and their rules. Some things may very depending on the programming language you decide to use TypeFile with.
 #### Interpretation
 Type interpretation will only go as far as the basic type.
 ```toml
 int = 1 # This will interpret the type as a integer, not integer-decimal-positive
 example = 1.0<float<fraction>> # This is a float fraction. It will not continue to be interpreted as a positive
 ```
+Interpretation for object index signatures will only go as far as the basic types inside it.
+```toml
+[object]
+key = 'value'
+int = 1
+# This will interpret this objects signature as a union string or integer type
+```
+The code above will be interpreted as:
+```toml
+[object<string|integer>]
+key = 'value'
+int = 1
+
+# A more strict and accurate index signature would look like:
+[obj<string<single>|integer<decimal<positive>>>]
+key = 'value'
+int = 1
+example = "value" # ERROR
+```
 #### Strings
-Strings are UTF-8 encoded (required for TypeFile). They can contain any amount of text and whitespace will be saved. They can also span multiple lines and use double quotes (`"`) or single quotes (`'`).
+Strings are UTF-8 encoded (required for TypeFile). They can contain any amount of text and whitespace will be preserved. They can also span multiple lines and use double quotes (`"`) or single quotes (`'`).
 ```toml
 string = 'string'
 multiline = '''this string
@@ -455,21 +426,145 @@ empty = []<string>[]
 error = 1<number>! # Cant be any type when type number is already declared
 expo = 20e-11<float<exponent<negative>>>
 ```
-### Tables
-Tables (also known as hash tables or dictionaries) are collections of key/value pairs. They are defined by headers, with square brackets on a line by themselves and will always implicity be an Object type. You can tell headers apart from arrays because arrays are only ever values. Tables should always be typed in [Camel Case](https://en.wikipedia.org/wiki/Camel_case).
+### Objects
+Objects are collections of key/value pairs known as properties. They are defined by headers, with square brackets on either side of a name. There must always be a name and they must always be opn a line by themselves (excluding comments). You can tell headers apart from arrays because arrays are only ever values. Objects should always be typed in [Camel Case](https://en.wikipedia.org/wiki/Camel_case).
 ```toml
-# Example table header
-[table]
+# Example object header
+[object]
 ```
-Under that, and until the next header or EOF, are the key/values of that table. Key/value pairs within tables are not guaranteed to be in any specific order. Tables are syntactictly similar to Keys.
+Under that, and until the next header or the End of File (EOF), are either the properties (key/value pairs) of that object or its subobjects.
 ```toml
 [strings_and_decimals]
-key = 'value'<string>
-decimal = 2<integer<decimal>>
+key = 'value'
+property = 2
 
 [owner]
 name = "zahtec"
 age = 100
 cool = false
 ```
-.. Continue tommorow. Add Object type to type list. ..
+Object names are syntactictly similar to Keys.
+```toml
+[apple."is.smooth"]
+value.boolean = true
+value.string = "true"
+```
+[JSON](https://www.json.org) conversion:
+```json
+{
+   "apple": { 
+      "is.smooth": { 
+         "value": {
+            "boolean": true,
+            "string": "true"
+         }
+      }
+   }
+}
+```
+Whitespace around the object name is ignored. However, best practice is to not use any extraneous whitespace. Indentation counts as whitespace and is also ignored.
+```toml
+[a.b.c]            # Okay
+[ d.e.f ]          # Okay, same as [d.e.f]
+[ g .  h  . i ]    # Okay, same as [g.h.i]
+[ j . "ʞ" . 'l' ]  # Okay, same as [j."ʞ".'l']
+```
+You don't need to specify all the super-tables if you don't want to.
+```toml
+[x] # You
+[x.y] # Don't
+[x.y.z] # Need these
+[x.y.z.w] # For this to work. Those will automatically be created
+
+[x] # Defining a super-table afterward is ok
+y = "height" # ERROR
+```
+Unlike [TOML](https://github.com/toml-lang/toml), empty objects are dissalowed. Like keys, you cannot define a table more than once.
+```toml
+[empty] # ERROR
+[fruit]
+orange = "orange"
+tasty = true
+
+[fruit] # ERROR
+apple = "red"
+tasty = true
+```
+You can not define a property (key) more than once.
+```toml
+[fruit]
+apple = "red" # Create "fruit.apple" equal to "red"
+
+[fruit.apple] # ERROR
+texture = "smooth"
+
+orange.tasty = true # Okay, but discouraged. Make the key "tasty" below the "orange" table
+[orange] # Okay
+color = "orange" # Okay
+```
+Defining objects out-of-order is permitted but discouraged.
+```toml
+[fruit.apple]
+[animal]
+[fruit.orange]
+```
+Instead make them in order, and if you wish, also in alphabetical order. Like so:
+```toml
+[animal]
+[fruit.apple]
+[fruit.orange]
+```
+The top-level object, also called the root of the TypeFile, starts at the beginning of the document and ends just before the first object header or EOF. Unlike other objects, it is nameless and cannot be relocated.
+```toml
+# root (top-level object) begins at the top of the document
+name = "Zahtec"
+cool = false
+
+# Top-level object ends and the "owner" object starts
+[owner]
+name = "Zahtec"
+age = 100
+```
+As mentioned before, dotted keys make any value before the last an object like so.
+```toml
+fruit.apple.color = "red"
+# Defines an object named fruit
+# Defines an sub-object "apple" inside the object "fruit": fruit.apple
+
+fruit.apple.taste.sweet = true
+# Defines a table named fruit.apple.taste
+# fruit and fruit.apple were already created
+
+fruit.apple = true # ERROR
+# "fruit.apple" was already defined as a table
+```
+As mentioned before, Since tables cannot be defined more than once, redefining such tables using a header is allowed but highly discouraged. Using dotted keys to redefine tables already defined in table header is dissalowed. The `[table]` form can, however, be used to define sub-tables within tables defined via dotted keys.
+```toml
+[fruit]
+fruit.apple.feel = "smooth" # Creates fruit.fruit.apple.feel, do not do this
+apple.color = "red"
+apple.taste.sweet = true
+
+[fruit.apple] # Okay
+bitter = false # Okay, but highly discouraged
+
+[fruit.apple.texture] # Okay
+smooth = true # Okay
+```
+Tables manage types inside them using index signatures. Quoted keys and bare keys will always take the string form, while dotted keys will take a table form. Index signatures are split by `:` with the key types on the left and the value types on the right. Index signatures are not interpreted.
+```toml
+[fruit<string:string>]
+key = "value" # Okay, key is the string "key", while the value is the string "value"
+"orange" = 'tasty' # Okay, key is the string "orange", while the value is the string 'tasty'
+
+[owner<string|table:integer<decimal>|string>] # Okay
+name = "zahtec" # Okay
+blood.type = 1 # Okay. Creates the table "blood" with the key "type" set to a decimal integer
+```
+Specifying a double/single quoted string type for the key side is dissalowed.
+```toml
+[fruit<string<single>:string|integer>] # ERROR
+
+[owner<string>] # ERROR
+# The index signature must specify both the key and value, not just 1
+```
