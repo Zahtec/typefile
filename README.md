@@ -1,5 +1,5 @@
 # TypeFile
-!! **THIS IS A CONCEPT** !!  test
+!! **THIS IS A CONCEPT** !!
 A type-oriented configuration file similar to [TOML](https://github.com/toml-lang/toml). Built for languages with strict typing like [TypeScript](https://www.typescriptlang.org). In JavaScript/TypeScript all numbers have 1 type, the node package handles this. For other languages like [Java](https://www.java.com), types like `decimal` or `float` will work.
 
 ## ❔ So what is TypeFile?
