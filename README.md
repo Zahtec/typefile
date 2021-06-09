@@ -20,7 +20,7 @@ For [Rust](https://www.rust-lang.org): Get the [cargo](https://crates.io) crate 
 ## ⚙ Spec
 TypeFile is case-sensitive.  
 TypeFile must always end in `.tf`.  
-TypeFile must be encoded in the UTF-8 format.  
+TypeFile must be encoded in the UTF-8 format.
 
 ## 📕 Docs
 
@@ -47,7 +47,7 @@ key = 'string'<number> # ERROR
 ```toml
 key=value<type>
 ```
-**Unspecified values are dissalowed. This does not include empty strings or null/undefined**
+**Unspecified values are disallowed. This does not include empty strings or null/undefined**
 ```toml
 key = # ERROR
 key2 = "" # Okay but discouraged. Set to string type and use null instead
@@ -61,7 +61,7 @@ bare_key = "value"
 bare-key = "value"
 1234 = "value"
 ```
-Quoted keys allow you to use a much broader amount of characters. Including special characters and whitespace, although using whitespace is discouraged. Not that although bare keys dont have quotes and quoted keys do. A key is always interpreted as a string in most languages.
+Quoted keys allow you to use a much broader amount of characters. Including special characters and whitespace, although using whitespace is discouraged. Not that although bare keys don't have quotes and quoted keys do. A key is always interpreted as a string in most languages.
 ```toml
 "character encoding" = "value" # Okay but discouraged, use "character_encoding" instead
 "ʎǝʞ" = 'value'
