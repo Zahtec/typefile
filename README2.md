@@ -244,8 +244,9 @@ Whitespace around the object name is ignored. However, it is discouraged and bes
 ["I like space"]
 ```
 
-Like keys, empty objects and object names are dissalowed and duplicate objects are dissalowed aswell. Empty objects count as objects with no properties or subobjects until the EOF or next object header.
-```
+Like keys, empty objects and object names are disallowed and duplicate objects are disallowed aswell. Empty objects are objects with no properties or subobjects until the EOF or next object header.
+
+```tf
 # These all throw an error.
 [""]
 prop = "value"
@@ -271,7 +272,7 @@ key = "value"
 prop = "value" # This key/property is not.
 ```
 
-The root object does not support subobjects. If you try to, it will throw an error.
+The root object does not support subobjects. If you try to, it will throw an error. You will learn about subobjects in the next section
 
 ```tf
 # This will throw an error.
@@ -279,78 +280,83 @@ The root object does not support subobjects. If you try to, it will throw an err
 prop = "value"
 ```
 
-But what are subobjects and how do I use them correctly? To learn, continue onto the next section.
 #### Subobjects
-Subobjects are objects within objects. This can go on infinitely. Subobjects are defined by putting an `:` before an object header and follow all the same concepts that a regular object does. The count of how many `:` characters to use is based on how deep that subobject is. Note that a subobject must be inside an object, the root object does not support them.
-```
-# These are all valid.
+
+Subobjects are objects within objects/subobjects. This can go on infinitely. Subobjects are defined by putting an `:` before an object header and follow all the same core concepts that a regular object does. The count of how many `:` characters come before the header is based on how deep that subobject is.
+
+```tf
 [object]
 prop = "value"
 :[subobject]
-prop = "value"
-::[subsubobject]
-prop = "value"
+prop = "value" # Accessed using object.subobject.prop
+::[subobject2]
+prop = "value" # Accessed using object.subobject.subobject2.prop
 ```
+
 For readability, since whitespace is ignored, you may style it however you like. Like so:
-```
-# These are all valid.
+
+```tf
 [object]
 prop = "value"
     :[subobject]
         prop = "value"
-        ::[subsubobject]
+        ::[subobject2]
             prop = "value"
 ```
-Here is the same data but in [JSON](https://www.json.org):
-```
+
+To make more sense of this, here is the same data but in [JSON](https://www.json.org):
+
+```json
 {
     "object": {
         "prop": "value",
         "subobject": {
             "prop": "value",
-            "subsubobject": {
+            "subobject2": {
                 "prop": "value"
             }
         }
     }
 }
 ```
-The root object does not support subobjects.
-```
-# This throws an error.
-:[subobject]
-prop = "value"
-```
-The amount of `:` characters before your subject depends on how deep it is.
-```
+
+The amount of `:` characters before your subject depends on how deep it is. A subobjects "deepness" means how many subobjects are between and its main parent object. This count includes the parent object. For example, below, the subobject "depth-1" is inside of 1 object, its main parent "depth-test". This means it is only 1 deep. While the subobject "depth-2" is inside of 2 objects, its main parent "depth-test", and "subobject-depth-1".
+
+```tf
 # These are all valid.
-[object]
+[depth-test]
 prop = "value"
-:[subobject-depth-1]
+:[depth-1]
 prop = "value"
-::[subobject-depth-2]
+::[depth-2] # Accessed using depth-test.depth-1.depth-2
 prop = "value"
-:[subobject2-depth-1]
+:[deep-1]
 prop = "value"
 ```
-Here is the same data but in [JSON](https://www.json.org):
-```
+
+To make sense of this all, here is the same data but in [JSON](https://www.json.org):
+
+```json
 {
-	"object": {
-		"prop": "value",
-		"subobject-depth-1": {
-			"prop": "value",
-			"subobject-depth-2": {
-				"prop": "value"
-			}
-		},
-		"subobject2-depth-1": {
-			"prop": "value"
-		}
-	}
+    "depth-test": {
+        "prop": "value",
+        "depth-1": {
+            "prop": "value",
+            "depth-2": {
+                "prop": "value"
+            }
+        },
+        "deep-1": {
+            "prop": "value"
+        }
+    }
 }
 ```
+
+This syntax make look weird and repetitive, but really you shouldn't be making so many subobjects you end up with something like `::::::::[subobject]`. That should tell you that you need to structure your data storage better. Also, its very easy to read. Let's say you are looking for a particular subobject, you are always going to be looking for headers with 1 or more `:` character infront of it.
+
 #### Inline objects
+
 Inline objects provide a more compact syntax for expressing tables. Inline objects are defined by inline curly braces `{` and `}`. Within the braces, the same rules apply as regular objects, and one or more comma-separated key/value pairs (properties) may appear. Inline objects must always be inline and can not be spread across multiple lines.
 ```
 # Example inline object.
