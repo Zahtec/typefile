@@ -357,140 +357,183 @@ This syntax make look weird and repetitive, but really you shouldn't be making s
 
 #### Inline objects
 
-Inline objects provide a more compact syntax for expressing tables. Inline objects are defined by inline curly braces `{` and `}`. Within the braces, the same rules apply as regular objects, and one or more comma-separated key/value pairs (properties) may appear. Inline objects must always be inline and can not be spread across multiple lines.
+Inline objects provide a more compact syntax for defining objects. Inline objects are defined by inline characters `{` and `}` in a value position for a property (key). They follow the same rules as regular objects. Within the `{` and `}` characters, properties are defined using one or more comma separated key/value pairs. Inline objects must always be inline and can not be spread across multiple lines. Subobjects within inline objects do not use the traditional `:` character. Just create a property with another inline object.
+
+```tf
+# Example of an inline object.
+object = { prop = "value", prop2 = "value" }
 ```
-# Example inline object.
-object = { prop = "value", prop2 = "value2" }
-```
+
 This is the same as:
-```
-# These are all valid.
+
+```tf
 [object]
 prop = "value"
-prop2 = "value2"
+prop2 = "value"
 ```
-Inline objects can also be used with subobjects. 
-```
-# These are all valid.
+
+Subobjects within inline objects are defined like so:
+
+```tf
 inline = { prop = "value", subobject = { prop = "value" } }
 ```
+
 This is the same as:
-```
+
+```tf
 # These are all valid.
 [inline]
 prop = "value"
 :[subobject]
 prop = "value"
 ```
-Inline objects are self-contained and define all properties and subobjects within them.
-```
-# This is valid.
-inline = { prop = "value", subobject = { prop = "value" } }
-# This will throw an error.
-[inline]
-prop = "value"
-```
-When in the root object, inline objects cannot be used to add properties or subobjects to an already defined object.
-```
-# This is valid.
-object = { prop = "value" }
-# This will throw an error.
-[object]
-prop = "value"
-# This is valid.
-[inline]
+
+Inline objects follow the same rules as regular objects. So, you cant define the same object twice, etc.
+
+```tf
 inline = { prop = "value" }
-# This will create inline.inline.prop which is equal to "value". It is highly discouraged.
+
+[inline] # This will throw an error.
+prop = "value"
 ```
+
+Inline objects are slightly different when it comes to type declaration, since they are inline. Regular type declaration with non-inline objects would look like so:
+
+```tf
+[owner]
+name = "zahtec" @ string
+ID = 1234 @ integer
+```
+
+While an inline object would use `&` symbols to declare types for each comma separated property, in order. Like so:
+
+```tf
+owner = { name = "zahtec", ID = 1234 } @ string & integer
+```
+
+Remember since whitespace is ignored I am using my own style, but you can style this any way you prefer as long as its on the same line.
+
 #### Object arrays
-Object arrays allow for multiple, unnamed objects, to be inside a named array. They can be expressed by using an object header with double brackets. Like so: `[[array]]`. The first instance of that header defines the array and its first element, each subsequent instance creates and defines a new object element in that array. The objects are inserted into the array in the order they were encountered. Object arrays follow all the same concepts that a regular object does except for duplicate naming, this will instead add a new object to the array.
-```
-# These are all valid.
+
+Object arrays allow for multiple, unnamed objects, to be inside a named array. They can be defined by using an object header with double `[]` characters, like so: `[[array]]`. The first instance of that header defines the array and its first element, each subsequent instance creates and defines a new unnamed object in that array. Once the next object header is hit, the array can no longer be added to. The objects are inserted into the array in the order they were encountered. Object arrays follow all the same concepts that a regular object does, except for duplicate naming and subobject support. Duplicate naming would usually throw an error, this will instead add a new object to the array. As for subobjects, they are disallowed since object arrays are meant for storing unnamed objects.
+
+```tf
 [[array]]
 prop = "value"
 [[array]]
 prop = "value2"
-# Duplicate names are allowed for array headers as that is how you add a new object to the array.
 ```
-Here is the same data but in [JSON](https://www.json.org):
-```
+
+For clarity, here is the same data but in [JSON](https://www.json.org):
+
+```json
 {
-	"array": [
-		{ "prop": "value" },
-		{ "prop": "value2" }
-	]
+    "array": [
+        { "prop": "value" },
+        { "prop": "value2" }
+    ]
 }
 ```
-Empty objects within the array are dissalowed.
-```
-# This throws an error.
-[[array]]
 
-[object]
+Just like regular objects, empty objects within the array are disallowed.
+
+```tf
+[[array]]
 prop = "value"
+
+[[array]] # This throws an error.
+
 ```
-Object arrays can be quoted or bare, like keys.
-```
-# This is valid.
+
+Object arrays can be quoted or bare, like regular objects.
+
+```tf
 [["I am quoted"]]
 prop = "value"
 ```
-Object arrays count as object headers.
-```
-# These are all valid.
+
+Object arrays can only be added to if they are uninterrupted from the first, defining, header.
+
+```tf
+[[array]]
+prop = "value"
+
 [object]
 prop = "value"
-[[array]]
-prop = "value2"
+
+[[array]] # This throws an error. The object "object" is interrupting.
+prop = "value"
 ```
-Subobjects, inline objects, and Subobjectarrays work as well. Like so:
+
+An array of inline objects is not equal to an object array (even if you can produce the same result) and will throw an error.
+
+```tf
+prop = [{ prop = "value" }]
+
+[[prop]] # You cannot add to the array using this method, this will throw a duplicate name error.
+prop = "value"
 ```
-# These are all valid.
+
+Object arrays do not support subobjects as they weren't meant for it, they will instead throw an error.
+
+```tf
 [[array]]
 prop = "value"
-[[array]]
-prop = "value2"
-prop2 = { inline = "value" }
-:[subobject]
+:[subobject] # This will throw an error.
+prop = "value"
+```
+
+Although this is not vice-versa. Object arrays can be a sort of "subobject array" when inside a regular object. If inside eachother though, this will not work.
+
+```tf
+[object]
 prop = "value"
 :[[subobjectarray]]
 prop = "value"
+# Just like regular object arrays, to add to it, you will need it to be uninterrupted. And in this case, at the same depth.
+# ::[[subobjectarray]] This would throw an error as you are trying to add a subobject array into a subobject array.
+:[subobject]
+prop = "value"
+# :[[subobjectarray]] This would throw an error since the subobject "subobject" interrupts it.
 ```
-Here is the same data but in [JSON](https://www.json.org):
-```
+
+And to sum it all up, here is the above data in [JSON](https://www.json.org):
+
+```json
 {
-	"array": [
-		{ "prop": "value" },
-		{
-			"prop": "value2",
-			"prop2": { "inline": "value" },
-			"subobject": { "prop": "value" },
-			"subobjectarray": [
-				{ "prop": "value" }
-			]
-		}
-	]
+    "object": {
+        "prop": "value",
+        "subobjectarray": [
+            { "prop": "value" }
+        ],
+        "subobject": {
+            "prop": "value"
+        }
+    }
 }
 ```
-An array of inline objects is not equal to an object array (even if you can produce the same result) and will throw an error.
-```
-# This throws an error.
-prop = [{ prop = "value" }]
 
-[[prop]]
-prop = "value"
-```
+### Arrays
+
+
+
 ### Type interpretation
-Type interpretation will only go as far as the basic type. This applies for all types.
-```
+
+Type interpretation will only go as far as the basic type. This applies for all values/types. You will learn about basic types vs specific/advanced types in the next section.
+
+```tf
 # This is interpreted as a string.
 prop = 'value'
 # This is interpreted as an integer. Not a integer-decimal-positive.
 prop2 = 2
-# This is not needed since it is automatically interpreted.
+# This is not needed since it is automatically interpreted as a boolean.
 prop3 = false @ boolean
 ```
+
 ### Types
+
+These are all the types that TypeScript supports. How they are parsed will depend on the language you are using. For example, if you are using [Javascript](https://javascript.com), integers and floats will just be basic numbers.
+
 - String
 - Integer
 - Float
@@ -500,4 +543,3 @@ prop3 = false @ boolean
 - Local Date-Time
 - Local Date
 - Any
-- Unknown
