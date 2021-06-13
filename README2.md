@@ -1,4 +1,4 @@
-# TypeFile
+# TypeFile ![version 1.0](https://img.shields.io/badge/version-1.0-blue)
 
 A strongly typed data storage file built for the modern age. With an easy to read syntax, fast parser for supported languages, and docs you can actually read.
 
