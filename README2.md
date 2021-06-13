@@ -43,8 +43,19 @@ These are the official docs for TypeFile. There is currently no syntax highlight
   - [Subobjects](#subobjects)
   - [Inline objects](#inline-objects)
   - [Object arrays](#object-arrays)
+- [Arrays](#arrays)
 - [Type interpretation](#type-interpretation)
+- [Type Declaration](#type-declaration)
 - [Types](#types)
+  - [String](#string)
+  - [Integer](#integer)
+  - [Float](#float)
+  - [Boolean](#boolean)
+  - [Array](#array)
+  - [Offset Date-Time](#offset-date-time)
+  - [Local Date-Time](#local-date-time)
+  - [Local Date](#local-date)
+  - [Any](#any)
 
 ### 💬 Comments
 
@@ -159,6 +170,7 @@ Values can be any one of these types:
 - [Offset Date-Time](#offset-date-time)
 - [Local Date-Time](#local-date-time)
 - [Local Date](#local-date)
+- [Any](#any)
 
 For strings, you can use single quotes (`'`) or double quotes (`"`). When using single quotes, you can nest double quotes inside of that string, and vice-versa. Two of the same type of quotes must be at the start and end of a string.
 
@@ -515,7 +527,26 @@ And to sum it all up, here is the above data in [JSON](https://www.json.org):
 
 ### Arrays
 
-T
+Arrays are collections of multiple values separated by commas inside `[` and `]`. As mentioned before, you can make objects inside arrays, but they are not equivalent to object arrays. Values inside of them can be any type that a value in a key/value (property) can be.
+
+```tf
+array = [ "value", "value2" ]
+```
+
+Whitespace is ignored as always, so you can style it however you want.
+
+```tf
+# You can style it like this.
+array = ["value1","value2"]
+# Or this.
+array2 = [ "value", "value2" ]
+```
+
+Array type declaration is just like an inline object. Types separated by `&` symbols for each value inside the array, in order.
+
+```tf
+array = [ "value1", 1 ] @ string & integer
+```
 
 ### Type interpretation
 
@@ -530,9 +561,21 @@ prop2 = 2
 prop3 = false @ boolean
 ```
 
+### Type Declaration
+
+Each type has its own main declaration and specifics separated by `.` symbols. Each type i will have its own "Declaration" section which shows how to declare it and all its possible specifics.
+
+```tf
+# String declaration. Simple, no specifics
+prop = "value" @ string
+# Integer declaration. Has many specifics.
+prop2 = 1 @ integer.decimal.positive
+# This means that when writing to the file, the above property can only be a positive decimal integer.
+```
+
 ### Types
 
-These are all the types that TypeScript supports. How they are parsed will depend on the language you are using. For example, if you are using [Javascript](https://javascript.com), integers and floats will just be basic numbers.
+These are all the types that TypeFile supports. How they are parsed will depend on the language you are using. For example, if you are using [Javascript](https://javascript.com), integers and floats will just be basic numbers.
 
 - String
 - Integer
@@ -543,3 +586,6 @@ These are all the types that TypeScript supports. How they are parsed will depen
 - Local Date-Time
 - Local Date
 - Any
+
+#### String
+
