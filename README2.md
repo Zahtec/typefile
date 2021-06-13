@@ -34,25 +34,25 @@ These are the official docs for TypeFile. There is currently no syntax highlight
 
 **Chapters:**
 
-- [Comments](#comments)
-- [Key/Value Pairs](#keyvalue-pairs)
-  - [Keys](#keys)
-  - [Values](#values)
-- [Objects](#objects)
-  - [The Root Object](#the-root-object)
-  - [Subobjects](#subobjects)
-  - [Inline Objects](#inline-objects)
-  - [Object Arrays](#object-arrays)
-- [Arrays](#arrays)
-- [Type Interpretation](#type-interpretation)
-- [Type Declaration](#type-declaration)
-- [Types](#types)
-  - [String](#string)
-  - [Integer](#integer)
-  - [Float](#float)
-  - [Boolean](#boolean)
-  - [Array](#array)
-  - [Any](#any)
+- [Comments](#-comments)
+- [Key/Value Pairs](#-keyvalue-pairs)
+  - [Keys](#-keys)
+  - [Values](#-values)
+- [Objects](#-objects)
+  - [The Root Object](#-the-root-object)
+  - [Subobjects](#-subobjects)
+  - [Inline Objects](#-inline-objects)
+  - [Object Arrays](#-object-arrays)
+- [Arrays](#-arrays)
+- [Type Interpretation](#-type-interpretation)
+- [Type Declaration](#-type-declaration)
+- [Types](#-types)
+  - [String](#-string)
+  - [Integer](#-integer)
+  - [Float](#-float)
+  - [Boolean](#-boolean)
+  - [Array](#-array)
+  - [Any](#-any)
 
 ### 💬 Comments
 
@@ -159,12 +159,12 @@ key = "value2" # Throws an error, duplicate key.
 
 Values can be any one of these types:
 
-- [String](#string)
-- [Integer](#integer)
-- [Float](#float)
-- [Boolean](#boolean)
-- [Array](#array)
-- [Any](#any)
+- [String](#-string)
+- [Integer](#-integer)
+- [Float](#-float)
+- [Boolean](#-boolean)
+- [Array](#-array)
+- [Any](#-any)
 
 For strings, you can use single quotes (`'`) or double quotes (`"`). When using single quotes, you can nest double quotes inside of that string, and vice-versa. Two of the same type of quotes must be at the start and end of a string.
 
@@ -571,13 +571,13 @@ prop2 = 1 @ integer.positive
 
 These are all the types that TypeFile supports. How they are parsed will depend on the language you are using. For example, if you are using [Javascript](https://javascript.com), integers and floats will just be basic numbers.
 
-- String
-- Integer
-- Float
-- Boolean
-- Array
-- Any
+- [String](#-string)
+- [Integer](#-integer)
+- [Float](#-float)
+- [Boolean](#-boolean)
+- [Array](#-array)
+- [Any](#-any)
 
-#### String
+#### 🧵 String
 
 .. Continue with types ..
