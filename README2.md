@@ -8,7 +8,7 @@ TypeFile aims to be a human readable, strongly typed, super compatible data stor
 
 ## 📦 How do I use it?
 
-To get started with TypeFile, you need the TypeFile Parser or TFP for your preferred language. This will read/write data to and from your TypeFile (`.tf`) in the correct manner. Anyone who is willing to create a parser for TypeFile in their preferred language is welcome to do so.
+To get started with TypeFile, you need the TypeFile Parser or TFP for your preferred language. This will read/write data to and from your TypeFile (`.tyf`) in the correct manner. Anyone who is willing to create a parser for TypeFile in their preferred language is welcome to do so.
 
 TypeFile Parsers:  
 For [Node.js](https://nodejs.org): Get the [npm](https://www.npmjs.com) package here (coming soon).  
@@ -23,7 +23,7 @@ For [IDEA](https://www.jetbrains.com/idea): Install the extension here (coming s
 ## ⚙ Spec
 
 TypeFile must be in a UTF-8 encoded file.  
-TypeFiles must always end in `.tf`.  
+TypeFiles must always end in `.tyf`.  
 TypeFile is case-sensitive.  
 TypeFile will ignore all whitespace (Tabs and spaces) except for inside quotes (strings).  
 The proper [MIME](https://en.wikipedia.org/wiki/Media_type) type for TypeFile is `text/typefile`.
@@ -58,14 +58,14 @@ These are the official docs for TypeFile. There is currently no syntax highlight
 
 Comments are defined by using the `#` character. Everything after the `#` character on that line will be a comment.
 
-```tf
+```tyf
 # Hi im a comment
 key = "value" # Look at the key/value pair to the left of me!
 ```
 
 To make a multi-line comment, use three `#`'s. After three `#`'s, the rest of the file will be a comment until the repeating three closing `#`'s appear. Not putting the last three `#`'s before the EOF (End of file) will result in an error.
 
-```tf
+```tyf
 ### I span
     Over Multiple
     Lines ###
@@ -78,7 +78,7 @@ To make a multi-line comment, use three `#`'s. After three `#`'s, the rest of th
 
 Keys are on the left side of the equals sign, while values are on the right. Type declaration is always after the values on the right and is initialized using the `@` symbol. The key, equals sign, value, and type declaration must be on the same line. Also, types must not be incorrect to the value or else the it will throw an error.
 
-```tf
+```tyf
 # "value" and "type" are not valid and would throw an error.
 # They are only used as an example for placement.
 key = value@type
@@ -86,19 +86,19 @@ key = value@type
 
 Since whitespace is ignored, the TFP (TypeFile Parser) sees the above data as:
 
-```tf
+```tyf
 key=value@type
 ```
 
 So you can style it any way you want. My preferred styling is:
 
-```tf
+```tyf
 key = value @ type
 ```
 
 Here is a small example with real values and types:
 
-```tf
+```tyf
 name = "zahtec" @ string
 integer = 1 @ integer
 ```
@@ -116,7 +116,7 @@ Obviously, [JSON](https://www.json.org) does not support type declaration.
 
 Blank values/keys are disallowed. This includes empty quoted keys, which you will learn about in the next section.
 
-```tf
+```tyf
 # Remember that "value" isn't a real value.
 key =
  = value
@@ -131,7 +131,7 @@ For most examples in these docs there will be no type declaration, you will lear
 A key may either be bare or quoted.  
 Bare keys may only contain ASCII letters, ASCII digits, underscores, and dashes (`A-Za-z0-9_-`), and should always be typed in [Camel Case](https://en.wikipedia.org/wiki/Camel_case).
 
-```tf
+```tyf
 key = "value"
 cool-bare_key = "value"
 1234 = "value"
@@ -140,7 +140,7 @@ cool-bare_key = "value"
 
 Quoted keys allow you to use a much broader amount of characters. Including whitespace, although using whitespace is discouraged.
 
-```tf
+```tyf
 "white space" = "value" # Okay but discouraged, use "white_space" or "white-space" instead.
 "ʎǝʞ" = "value"
 "key" = "value"
@@ -149,7 +149,7 @@ Quoted keys allow you to use a much broader amount of characters. Including whit
 
 Defining a key multiple times is disallowed. Bare keys and quoted keys are equivalent for this matter.
 
-```tf
+```tyf
 key = "value"
 key = "value2" # Throws an error, duplicate key.
 "key" = "value3" # And so does this.
@@ -168,7 +168,7 @@ Values can be any one of these types:
 
 For strings, you can use single quotes (`'`) or double quotes (`"`). When using single quotes, you can nest double quotes inside of that string, and vice-versa. Two of the same type of quotes must be at the start and end of a string.
 
-```tf
+```tyf
 key = 'value'
 key2 = "value"
 nested = '"quote" -Zahtec'
@@ -178,7 +178,7 @@ key3 = 'value"
 
 To declare a type for a value, use an `@` symbol. Everything after the `@` will be treated as a type.
 
-```tf
+```tyf
 key = "value" @ string
 key2 = 1 @ integer
 key3 = false @ boolean
@@ -190,7 +190,7 @@ key3 = false @ boolean
 
 Objects are collections of key/value pairs known as properties. They are defined by headers, with square brackets on either side of their name like so: `[object]`. Object headers must always have a name. Their names follow the same syntax as keys. Objects must always be on a line by themselves and should always be typed in [Camel Case](https://en.wikipedia.org/wiki/Camel_case).
 
-```tf
+```tyf
 # Example object header.
 [owner]
 name = "zahtec" # Example object property.
@@ -198,7 +198,7 @@ name = "zahtec" # Example object property.
 
 Under the object header, and until the EOF (End of file) or next object header, are either the properties (key/value pairs) of that object or its subobjects. You will learn about subobjects later.
 
-```tf
+```tyf
 [object]
 prop = "value"
 
@@ -208,7 +208,7 @@ prop = "value"
 
 As you may have noticed, there are duplicate properties (keys) in the file above, which is disallowed. Or so it may seem. Let me show you:
 
-```tf
+```tyf
 ### The key with "value2" throws an error, since it has the same name as 
 the one above, and they are both in the same object. ###
 [object]
@@ -218,7 +218,7 @@ prop = "value2"
 
 But the same property across multiple objects is permitted. Properties inside different objects, even if they are named the same, do not conflict.
 
-```tf
+```tyf
 # This property is in the root object (Which you will learn about next).
 prop = "value"
 
@@ -241,7 +241,7 @@ To make it clearer, here is the same data but in [JSON](https://www.json.org):
 
 Whitespace around the object name is ignored. However, it is discouraged and best practice is to not use any extra, unneeded whitespace.
 
-```tf
+```tyf
 [a b c]
 [ d e f ]
 [ g        h            i ]
@@ -252,7 +252,7 @@ Whitespace around the object name is ignored. However, it is discouraged and bes
 
 Like keys, empty objects and object names are disallowed and duplicate objects are disallowed aswell. Empty objects are objects with no properties or subobjects until the EOF or next object header.
 
-```tf
+```tyf
 # These all throw an error.
 [""]
 prop = "value"
@@ -270,7 +270,7 @@ prop = "value2"
 
 The root object is the main object the file is represented as. All root object properties must be before the first non-root object or EOF. Most of the time root object properties are called keys.
 
-```tf
+```tyf
 # This key (property) is in the root object.
 key = "value"
 
@@ -280,7 +280,7 @@ prop = "value" # This key/property is not.
 
 The root object does not support subobjects. If you try to, it will throw an error. You will learn about subobjects in the next section
 
-```tf
+```tyf
 # This will throw an error.
 :[suboobject]
 prop = "value"
@@ -290,7 +290,7 @@ prop = "value"
 
 Subobjects are objects within objects/subobjects. This can go on infinitely. Subobjects are defined by putting an `:` before an object header and follow all the same core concepts that a regular object does. The count of how many `:` characters come before the header is based on how deep that subobject is.
 
-```tf
+```tyf
 [object]
 prop = "value"
 :[subobject]
@@ -301,7 +301,7 @@ prop = "value" # Accessed using object.subobject.subobject2.prop
 
 For readability, since whitespace is ignored, you may style it however you like. Like so:
 
-```tf
+```tyf
 [object]
 prop = "value"
     :[subobject]
@@ -328,7 +328,7 @@ To make more sense of this, here is the same data but in [JSON](https://www.json
 
 The amount of `:` characters before your subject depends on how deep it is. A subobjects "deepness" means how many subobjects are between and its main parent object. This count includes the parent object. For example, below, the subobject "depth-1" is inside of 1 object, its main parent "depth-test". This means it is only 1 deep. While the subobject "depth-2" is inside of 2 objects, its main parent "depth-test", and "subobject-depth-1".
 
-```tf
+```tyf
 # These are all valid.
 [depth-test]
 prop = "value"
@@ -365,14 +365,14 @@ This syntax make look weird and repetitive, but really you shouldn't be making s
 
 Inline objects provide a more compact syntax for defining objects. Inline objects are defined by inline characters `{` and `}` in a value position for a property (key). They follow the same rules as regular objects. Within the `{` and `}` characters, properties are defined using one or more comma separated key/value pairs. Inline objects must always be inline and can not be spread across multiple lines. Subobjects within inline objects do not use the traditional `:` character. Just create a property with another inline object.
 
-```tf
+```tyf
 # Example of an inline object.
 object = { prop = "value", prop2 = "value" }
 ```
 
 This is the same as:
 
-```tf
+```tyf
 [object]
 prop = "value"
 prop2 = "value"
@@ -380,13 +380,13 @@ prop2 = "value"
 
 Subobjects within inline objects are defined like so:
 
-```tf
+```tyf
 inline = { prop = "value", subobject = { prop = "value" } }
 ```
 
 This is the same as:
 
-```tf
+```tyf
 # These are all valid.
 [inline]
 prop = "value"
@@ -396,7 +396,7 @@ prop = "value"
 
 Inline objects follow the same rules as regular objects. So, you cant define the same object twice, etc.
 
-```tf
+```tyf
 inline = { prop = "value" }
 
 [inline] # This will throw an error.
@@ -405,7 +405,7 @@ prop = "value"
 
 Inline objects are slightly different when it comes to type declaration, since they are inline. Regular type declaration with non-inline objects would look like so:
 
-```tf
+```tyf
 [owner]
 name = "zahtec" @ string
 ID = 1234 @ integer
@@ -413,7 +413,7 @@ ID = 1234 @ integer
 
 While an inline object would use `&` symbols to declare types for each comma separated property, in order. Like so:
 
-```tf
+```tyf
 owner = { name = "zahtec", ID = 1234 } @ string & integer
 ```
 
@@ -423,7 +423,7 @@ Remember since whitespace is ignored I am using my own style, but you can style 
 
 Object arrays allow for multiple, unnamed objects, to be inside a named array. They can be defined by using an object header with double `[]` characters, like so: `[[array]]`. The first instance of that header defines the array and its first element, each subsequent instance creates and defines a new unnamed object in that array. Once the next object header is hit, the array can no longer be added to. The objects are inserted into the array in the order they were encountered. Object arrays follow all the same concepts that a regular object does, except for duplicate naming and subobject support. Duplicate naming would usually throw an error, this will instead add a new object to the array. As for subobjects, they are disallowed since object arrays are meant for storing unnamed objects.
 
-```tf
+```tyf
 [[array]]
 prop = "value"
 [[array]]
@@ -443,7 +443,7 @@ For clarity, here is the same data but in [JSON](https://www.json.org):
 
 Just like regular objects, empty objects within the array are disallowed.
 
-```tf
+```tyf
 [[array]]
 prop = "value"
 
@@ -453,14 +453,14 @@ prop = "value"
 
 Object arrays can be quoted or bare, like regular objects.
 
-```tf
+```tyf
 [["I am quoted"]]
 prop = "value"
 ```
 
 Object arrays can only be added to if they are uninterrupted from the first, defining, header.
 
-```tf
+```tyf
 [[array]]
 prop = "value"
 
@@ -473,7 +473,7 @@ prop = "value"
 
 An array of inline objects is not equal to an object array (even if you can produce the same result) and will throw an error.
 
-```tf
+```tyf
 prop = [{ prop = "value" }]
 
 [[prop]] # You cannot add to the array using this method, this will throw a duplicate name error.
@@ -482,7 +482,7 @@ prop = "value"
 
 Object arrays do not support subobjects as they weren't meant for it, they will instead throw an error.
 
-```tf
+```tyf
 [[array]]
 prop = "value"
 :[subobject] # This will throw an error.
@@ -491,7 +491,7 @@ prop = "value"
 
 Although this is not vice-versa. Object arrays can be a sort of "subobject array" when inside a regular object. If inside eachother though, this will not work.
 
-```tf
+```tyf
 [object]
 prop = "value"
 :[[subobjectarray]]
@@ -523,13 +523,13 @@ And to sum it all up, here is the above data in [JSON](https://www.json.org):
 
 Arrays are collections of multiple values separated by commas inside `[` and `]`. As mentioned before, you can make objects inside arrays, but they are not equivalent to object arrays. Values inside of them can be any type that a value in a key/value (property) can be.
 
-```tf
+```tyf
 array = [ "value", "value2" ]
 ```
 
 Whitespace is ignored as always, so you can style it however you want.
 
-```tf
+```tyf
 # You can style it like this.
 array = ["value1","value2"]
 # Or this.
@@ -538,7 +538,7 @@ array2 = [ "value", "value2" ]
 
 Array type declaration is just like an inline object. Types separated by `&` symbols for each value inside the array, in order.
 
-```tf
+```tyf
 array = [ "value1", 1 ] @ string & integer
 ```
 
@@ -546,7 +546,7 @@ array = [ "value1", 1 ] @ string & integer
 
 Type interpretation will only go as far as the basic type. This applies for all values/types. You will learn about basic types vs specific/advanced types in the next section.
 
-```tf
+```tyf
 # This is interpreted as a string.
 prop = 'value'
 # This is interpreted as an integer. Not a integer-decimal-positive.
@@ -559,7 +559,7 @@ prop3 = false @ boolean
 
 Each type has its own main declaration and specifics separated by `.` symbols. Each type i will have its own "Declaration" section which shows how to declare it and all its possible specifics. Specifics are TypeFiles word for subtypes.
 
-```tf
+```tyf
 # String declaration. Simple, no specifics
 prop = "value" @ string
 # Integer declaration. Has many specifics.
