@@ -25,7 +25,7 @@ For [IDEA](https://www.jetbrains.com/idea): Install the extension here (coming s
 TypeFile must be in a UTF-8 encoded file.  
 TypeFiles must always end in `.tf`.  
 TypeFile is case-sensitive.  
-TypeFile will ignore all whitespace (Tabs and spaces) except for inside a string.  
+TypeFile will ignore all whitespace (Tabs and spaces) except for inside quotes (strings).  
 The proper [MIME](https://en.wikipedia.org/wiki/Media_type) type for TypeFile is `text/typefile`.
 
 ## 📕 Docs
@@ -39,12 +39,12 @@ These are the official docs for TypeFile. There is currently no syntax highlight
   - [Keys](#keys)
   - [Values](#values)
 - [Objects](#objects)
-  - [The root object](#the-root-object)
+  - [The Root Object](#the-root-object)
   - [Subobjects](#subobjects)
-  - [Inline objects](#inline-objects)
-  - [Object arrays](#object-arrays)
+  - [Inline Objects](#inline-objects)
+  - [Object Arrays](#object-arrays)
 - [Arrays](#arrays)
-- [Type interpretation](#type-interpretation)
+- [Type Interpretation](#type-interpretation)
 - [Type Declaration](#type-declaration)
 - [Types](#types)
   - [String](#string)
@@ -74,7 +74,7 @@ To make a multi-line comment, use three `#`'s. After three `#`'s, the rest of th
     an error
 ```
 
-### 🗝 Key/Value pairs
+### 🗝 Key/Value Pairs
 
 Keys are on the left side of the equals sign, while values are on the right. Type declaration is always after the values on the right and is initialized using the `@` symbol. The key, equals sign, value, and type declaration must be on the same line. Also, types must not be incorrect to the value or else the it will throw an error.
 
@@ -361,7 +361,7 @@ To make sense of this all, here is the same data but in [JSON](https://www.json.
 
 This syntax make look weird and repetitive, but really you shouldn't be making so many subobjects you end up with something like `::::::::[subobject]`. That should tell you that you need to structure your data storage better. Also, its very easy to read. Let's say you are looking for a particular subobject, you are always going to be looking for headers with 1 or more `:` character infront of it.
 
-#### 📏 Inline objects
+#### 📏 Inline Objects
 
 Inline objects provide a more compact syntax for defining objects. Inline objects are defined by inline characters `{` and `}` in a value position for a property (key). They follow the same rules as regular objects. Within the `{` and `}` characters, properties are defined using one or more comma separated key/value pairs. Inline objects must always be inline and can not be spread across multiple lines. Subobjects within inline objects do not use the traditional `:` character. Just create a property with another inline object.
 
@@ -419,7 +419,7 @@ owner = { name = "zahtec", ID = 1234 } @ string & integer
 
 Remember since whitespace is ignored I am using my own style, but you can style this any way you prefer as long as its on the same line.
 
-#### 🛅 Object arrays
+#### 🛅 Object Arrays
 
 Object arrays allow for multiple, unnamed objects, to be inside a named array. They can be defined by using an object header with double `[]` characters, like so: `[[array]]`. The first instance of that header defines the array and its first element, each subsequent instance creates and defines a new unnamed object in that array. Once the next object header is hit, the array can no longer be added to. The objects are inserted into the array in the order they were encountered. Object arrays follow all the same concepts that a regular object does, except for duplicate naming and subobject support. Duplicate naming would usually throw an error, this will instead add a new object to the array. As for subobjects, they are disallowed since object arrays are meant for storing unnamed objects.
 
@@ -542,7 +542,7 @@ Array type declaration is just like an inline object. Types separated by `&` sym
 array = [ "value1", 1 ] @ string & integer
 ```
 
-### ❓ Type interpretation
+### ❓ Type Interpretation
 
 Type interpretation will only go as far as the basic type. This applies for all values/types. You will learn about basic types vs specific/advanced types in the next section.
 
