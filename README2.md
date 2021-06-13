@@ -1,10 +1,10 @@
-# TypeFile ![version 1.0](https://img.shields.io/badge/version-1.0-blue)
+# TypeFile ![Version 1.0](https://img.shields.io/badge/version-1.0-blue)
 
 A strongly typed data storage file built for the modern age. With an easy to read syntax, fast parser for supported languages, and docs you can actually read.
 
 ## ℹ What is TypeFile?
 
-TypeFile aims to be a human readable, strongly typed, super compatible data storage file for everyone. It is a combination of [TOML](https://github.com/toml-lang/toml), [JSON](https://www.json.org), and [YAML](https://yaml.org), into one simple file type (Most of the combinations include styling/file structure).
+TypeFile aims to be a human readable, strongly typed, super compatible data storage file for everyone. It is a combination of [TOML](https://github.com/toml-lang/toml), [JSON](https://www.json.org), and [YAML](https://yaml.org), into one simple file type (Most of the combinations include styling/file structure). TypeFile follows the [Semantic Versioning](https://semver.org) standard for all packages, as for standards/revisions, it goes by MAJOR.MINOR.
 
 ## 📦 How do I use it?
 
