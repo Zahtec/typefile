@@ -515,7 +515,7 @@ And to sum it all up, here is the above data in [JSON](https://www.json.org):
 
 ### Arrays
 
-
+T
 
 ### Type interpretation
 
