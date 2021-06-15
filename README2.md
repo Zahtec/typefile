@@ -580,4 +580,40 @@ These are all the types that TypeFile supports. How they are parsed will depend 
 
 #### 🧵 String
 
-.. Continue with types ..
+Strings are UTF-8 encoded (required for TypeFile) characters, and must be only UTF-8 compatible characters. They can contain any amount of text and whitespace, which will be preserved instead of removed. They can also span multiple lines and use double quotes (`"`) or single quotes (`'`). Quoting inside strings is done by using the opposite type of quote inside one.
+
+```tyf
+string = 'string'
+string2 = "string"
+quote = '"opposite" -Zahtec'
+quote2 = "'opposite' -Zahtec"
+multi = '''I span
+           over multiple
+           lines'''
+```
+
+Strings' type declaration is: `string`. They have no specifics.
+
+```tyf
+string = "string" @ string
+```
+
+#### 1️⃣ Integers
+
+Integers are non-decimal numbers that are either negative or positive. Negative integers must have the `-` prefix, while positive integers can either have the `+` symbol or nothing. Integers will automatically become signed/unsigned based on their prefix. Leading zeros are disallowed and will throw an error.
+
+```tyf
+int = 1
+int2 = +1
+# The above values are the same.
+int3 = -1
+# int4 = 01 Disallowed, would throw an error.
+```
+
+For larger numbers that may be increasingly hard to read, you can use `_` to separate numbers in to your preferred grouping method. The `_` symbols will be ignored and the number will be the exact same, just more readable.
+
+```tyf
+int = 1_000 # Same as 1000.
+```
+
+Integer values may also be in these other 3 forms: Hexadecimal, Binary, or Octal. Each of these formats have a prefix to identify them. Hexadecimal being: `0x`, Octal being: `0o`, and binary being `0b`. 
