@@ -51,7 +51,6 @@ These are the official docs for TypeFile. There is currently no syntax highlight
   - [Integer](#-integer)
   - [Float](#-float)
   - [Boolean](#-boolean)
-  - [Array](#-array)
   - [Any](#-any)
 
 ### 💬 Comments
@@ -163,7 +162,6 @@ Values can be any one of these types:
 - [Integer](#-integer)
 - [Float](#-float)
 - [Boolean](#-boolean)
-- [Array](#-array)
 - [Any](#-any)
 
 For strings, you can use single quotes (`'`) or double quotes (`"`). When using single quotes, you can nest double quotes inside of that string, and vice-versa. Two of the same type of quotes must be at the start and end of a string.
@@ -417,6 +415,12 @@ While an inline object would use `&` symbols to declare types for each comma sep
 owner = { name = "zahtec", ID = 1234 } @ string & integer
 ```
 
+Inline objects can be used inside Arrays, which you will learn about later, in this case they have a special declaration: `object()`. Inside the brackets goes the normal type declaration an inline object uses, `&` symbols to seperate in-order declared types. Here is an example:
+
+```tyf
+array = [ "value", { inline = "object", prop = 2 } ] @ string & object(string & integer)
+```
+
 Remember since whitespace is ignored I am using my own style, but you can style this any way you prefer as long as its on the same line.
 
 #### 🛅 Object Arrays
@@ -521,25 +525,38 @@ And to sum it all up, here is the above data in [JSON](https://www.json.org):
 
 ### 💼 Arrays
 
-Arrays are collections of multiple values separated by commas inside `[` and `]`. As mentioned before, you can make objects inside arrays, but they are not equivalent to object arrays. Values inside of them can be any type that a value in a key/value (property) can be.
+Arrays are collections of multiple values separated by commas inside `[` and `]`. These values support all the same types that a value in a property (key/value pair) can. Arrays can span over multiple lines, although if an inline object value is used, that value must all be inline. Whitespace is ignored. Trailing commas are disallowed an will throw an error. As mentioned before, you can make objects inside arrays, but they are not equivalent to object arrays. Values inside of them can be any type that a value in a key/value (property) can be.
 
 ```tyf
 array = [ "value", "value2" ]
+array2 = [
+    "multi",
+    "line",
+    true
+]
 ```
 
-Whitespace is ignored as always, so you can style it however you want.
+Trailing commas (or terminating commas) will cause an error to be thrown. Like so:
 
 ```tyf
-# You can style it like this.
-array = ["value1","value2"]
-# Or this.
-array2 = [ "value", "value2" ]
+# This throws an error.
+array = [ "string", 1, ]
 ```
 
-Array type declaration is just like an inline object. Types separated by `&` symbols for each value inside the array, in order.
+Array type declaration is just like an inline object. Types separated by `&` symbols for each value inside the array, in order. For multi-line arrays, the declaration always goes after the last `]` symbol on the same line.
 
 ```tyf
 array = [ "value1", 1 ] @ string & integer
+array2 = [ 
+    "value1",
+    123
+] @ string & integer
+```
+
+You learned earlier that inline objects have a special declaration when being used inside arrays. They have a special declaration: `object()`. Inside the brackets goes the normal type declaration an inline object uses, `&` symbols to separate in-order declared types.
+
+```tyf
+array [ "value", { inline = "object", bool = true } ] @ string & object(string & boolean)
 ```
 
 ### ❓ Type Interpretation
@@ -575,7 +592,6 @@ These are all the types that TypeFile supports. How they are parsed will depend 
 - [Integer](#-integer)
 - [Float](#-float)
 - [Boolean](#-boolean)
-- [Array](#-array)
 - [Any](#-any)
 
 #### 🧵 String
@@ -600,7 +616,7 @@ string = "string" @ string
 
 #### 1️⃣ Integers
 
-Integers are non-decimal numbers that are either negative or positive. Negative integers must have the `-` prefix, while positive integers can either have the `+` symbol or nothing. Integers will automatically become signed/unsigned based on their prefix. Leading zeros are disallowed and will throw an error.
+Integers are non-decimal numbers that are either negative or positive. Negative integers must have the `-` prefix, while positive integers can either have the `+` symbol or nothing. Integers will automatically become signed/unsigned based on their prefix. Leading zeros are disallowed and will throw an error. `+0`/`0` and `-0` are considered Floats, not integers.
 
 ```tyf
 int = 1
@@ -610,10 +626,106 @@ int3 = -1
 # int4 = 01 Disallowed, would throw an error.
 ```
 
-For larger numbers that may be increasingly hard to read, you can use `_` to separate numbers in to your preferred grouping method. The `_` symbols will be ignored and the number will be the exact same, just more readable.
+For larger numbers that may be increasingly hard to read, including Hexes, Binaries, and Octals. You may use `_` to separate numbers in to your preferred grouping method. The `_` symbols will be ignored and the number will be the exact same, just more readable. Each `_` must be surrounded by at least 1 digit, otherwise an error is thrown.
 
 ```tyf
 int = 1_000 # Same as 1000.
+# These both throw errors.
+int2 = 1000_
+int3 = _1000
 ```
 
-Integer values may also be in these other 3 forms: Hexadecimal, Binary, or Octal. Each of these formats have a prefix to identify them. Hexadecimal being: `0x`, Octal being: `0o`, and binary being `0b`. 
+Integer values may also be in these other 3 forms: Hexadecimal, Binary, or Octal. Each of these formats have a prefix to identify them. Hexadecimal being: `0x`, Octal being: `0o`, and binary being `0b`. When going through the TFP (TypeFile Parser), all Hexadecimals, Octals, and Binary values will be converted to decimal integers unless support by the language. Hex values are case-insensitive and leading zeros in this format are allowed. Negative integers should have the `-` symbol before the prefix of either a hexadecimal, octal or binary.
+
+```tyf
+hex = 0xDEADBEEF
+
+oct = 0o01234567
+
+bin = 0b11010110
+```
+
+Integers' type declaration is: `integer`. They have a total of 6 specifics including a few subspecifics. The specifics are: `positive` and `negative`. The subspecifics are: `decimal`, `hexadecimal`, `octal`, and `binary`. Here is an example:
+
+```tyf
+int = 1 @ integer.positive.decimal
+hex = 0xDEADBEEF @ integer.positive.hexadecimal
+oct = 0o01234567 @ integer.positive.octal
+bin = 0b11010110 @ integer.positive.binary
+# And for negative numbers.
+int2 = -1 @ integer.negative.decimal
+hex = -0xDEADBEEF @ integer.negative.hexadecimal
+# And so on.
+```
+
+### ⚓ Floats
+
+Floats are fractional numbers following the [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754) standard. They consist of an integer and either an exponent represented as `e-` or `e+` (case insensitive) or a fractional portion (integer) after a decimal point. There are also special Float values, which will be shown later. Both (fraction and exponent) can be present at the same time, if so, the exponent declaration must be after the fractional portion. There must be values on both sides of a decimal point, otherwise an error is thrown. Exponents must also always have a value, otherwise an error is thrown. Floats support decimal integers only. Hex, Octal, and Binary are disallowed.
+
+```tyf
+float = 1.5
+float2 = 1e+2 # This is the same as 1*10^2.
+float3 = 1e-2
+float4 = 1.5e+5 # = 150,000
+```
+
+There must be integer values on both sides of a fraction. For exponents, there must always be a value aswell, using `0` denormalizes the mantissa according to the [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754) standard. If you are not familiar, the mantissa is the value before the exponent declaration (`e+/-`) fractionalized and converted into binary.
+
+```tyf
+# These throw errors.
+float = .1
+float2 = 1.
+float3 = 1.e+1
+float4 = 1e+
+# This does not, but it is discouraged.
+float5 = 1e+0
+```
+
+Special [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754) values also exist. TypeFile supports `+0` (which is also `0`), `-0`, Infinity, and Not a Number (NaN). Not a Number has 3 different types, `NaN`, `sNaN`, `qNaN`, these all have different meanings. `sNan` and `qNaN` stand for quiet and silent `NaN`. Quiet (`qNan`) NaNs don not throw an exception, while signaling (`sNan`) NaNs do. The regular `NaN` with no `s` or `q` prefix will default to your preferred programming languages' value. So it will decide wether it is silent or signaling. Even though these docs show Not a Number being `NaN`, the actual value in TypeFile is all lowercase. All these special types are represented in TypeFile using specialized values. Like so:
+
+```tyf
+float = inf # Same as +inf, positive infinity.
+float2 = -inf # Negative infinity.
+float3 = nan
+float4 = snan
+float5 = qnan
+```
+
+Floats' type declaration is: `float`. It has a total of 5 specifics including subspecifics. The specifics are: `positive`, `negative`, and `nan`. Since Not a Number can neither be negative or positive, it is a regular specific, if used like a subspecific, an error is thrown. The subspecifics are: `fraction`, `exponent`, `infinity`. Here is an example:
+
+```tyf
+float = 1.0 @ float.positive.fraction
+float2 = 5e+2 @ float.positive.exponent
+float3 = -inf @ float.negative.infinity
+float4 = nan @ float.nan
+```
+
+### ⛔ Booleans
+
+Booleans are standard true/false values. They either represent a true (`1`) value, or a false (`0`) value. Nothing else.
+
+```tyf
+bool = false
+bool2 = true
+```
+
+Booleans' type declaration is `boolean`. It has no specifics since it is such a simple type. Here is an example:
+
+```tyf
+bool = true @ boolean
+bool2 = false @ boolean
+```
+
+### 🌌 Any
+
+The any type is the arbitrary type of TypeFile. The any type allows any supported value to be assigned to it. Its use is discouraged as it removes most of the funtionality TypeFil is used for, but can be useful in some cases. The any type is declared in a slightly unusual way. Instead of doing something like `@ any` after a properties value, you simply put a `!` symbol. Here is an example:
+
+```tyf
+any = "I want this to be any type"!
+```
+
+This allows for any value to be written to the "any" property.
+
+## ✔ Summary
+
+To finish up and get familiar with using TypeFile. I suggest you find the TFP for your preferred programming language and read the docs on that, since some minor things change language to language. You should also look in the examples folder on this branch, as they give some good context to a few things that might still be foggy. Thanks for using TypeFile! As my first major project, I would like to hear all the feedback I can get! The issues page on this branch is a great place for that!

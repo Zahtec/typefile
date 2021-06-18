@@ -240,7 +240,7 @@ h = -0xDEADBEEF<integer<hexadecimal<negative>>> # Okay
 # And so on
 ```
 #### Floats
-Floats should be implemented as IEEE 754 binary64 values. ***(message from TypeFile dev - I have no clue what this means)***
+Floats should be implemented as IEEE 754 binary64 values.
 
 A float consists of an decimal integer part (with allowed leading zeros) followed by a fractional part and/or an exponent part. If both a fractional part and exponent part are present, the fractional part must precede the exponent part.
 ```toml
