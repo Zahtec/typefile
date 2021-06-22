@@ -658,7 +658,7 @@ hex = -0xDEADBEEF @ integer.negative.hexadecimal
 # And so on.
 ```
 
-### ⚓ Floats
+#### ⚓ Floats
 
 Floats are fractional numbers following the [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754) standard. They consist of an integer and either an exponent represented as `e-` or `e+` (case insensitive) or a fractional portion (integer) after a decimal point. There are also special Float values, which will be shown later. Both (fraction and exponent) can be present at the same time, if so, the exponent declaration must be after the fractional portion. There must be values on both sides of a decimal point, otherwise an error is thrown. Exponents must also always have a value, otherwise an error is thrown. Floats support decimal integers only. Hex, Octal, and Binary are disallowed.
 
@@ -700,7 +700,7 @@ float3 = -inf @ float.negative.infinity
 float4 = nan @ float.nan
 ```
 
-### ⛔ Booleans
+#### ⛔ Booleans
 
 Booleans are standard true/false values. They either represent a true (`1`) value, or a false (`0`) value. Nothing else.
 
@@ -716,7 +716,7 @@ bool = true @ boolean
 bool2 = false @ boolean
 ```
 
-### 🌌 Any
+#### 🌌 Any
 
 The any type is the arbitrary type of TypeFile. The any type allows any supported value to be assigned to it. Its use is discouraged as it removes most of the funtionality TypeFil is used for, but can be useful in some cases. The any type is declared in a slightly unusual way. Instead of doing something like `@ any` after a properties value, you simply put a `!` symbol. Here is an example:
 
